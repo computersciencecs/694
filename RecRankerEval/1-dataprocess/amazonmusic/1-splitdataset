@@ -1,7 +1,7 @@
 import random
 like = []
 dislike = []
-with open('rating.csv') as f:
+with open('inter2-5.csv') as f:
     for line in f:
         items = line.strip().split('\t')
         new_line = ','.join(items[:])+'\n'
