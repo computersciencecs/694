@@ -10,7 +10,7 @@ if __name__ == '__main__':
     import time
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default='music', help='')
+    parser.add_argument("--dataset", type=str, default='ml-100k', help='')
     parser.add_argument("--model", type=str, default='XSimGCL', help='')
     parser.add_argument("--aug_type", type=str, default='0', help='')
     args = parser.parse_args()
