@@ -1,7 +1,7 @@
 # 694
 
 Workflow:
-1-Process the original dataset;
+1-Process the original dataset(Already in the dataset folder);
 2-Split the dataset;
 3-Run the initial recommendation model to generate the initial recommendation results and the files required to build prompts;
 4-Build training and inference prompts;
