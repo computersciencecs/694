@@ -178,34 +178,27 @@ After inference is completed, copy the output file inference.txt to the ./RecRan
 ```python
 .
 ├── RecRankerEval
-│   ├── 1-dataprocess
+│   ├── dataprocess
 │       ├── amazonmusic
-│           └── 1-amazonmusic-data-process.ipynb
-│               └── 2-splitdataset.py
+│           └── amazonmusic-data-process.ipynb
+│               └── splitdataset.py
 │       ├── bookcrossing
-│           └── 1-bookcrossing-data-process.ipynb
-│               └── 2-splitdataset.py
+│           └── bookcrossing-data-process.ipynb
+│               └── splitdataset.py
 │       ├── ml-100k
-│           └── 1-splitdataset.ipynb
+│           └── splitdataset.ipynb
 │       ├── ml-1m
-│           └── 1-splitdataset.ipynb
-│       ├── resultsprocess
+│           └── splitdataset.ipynb
+│       ├── process-inference-results
 │           ├── hybrid-output-process.ipynb
 │           ├── listwise-output-process.ipynb
 │           ├── pairwise-output-process.ipynb
 │           └── pointwise-output-process.ipynb
-│       ├── Processing Format.ipynb
-│       ├── gptinference.py
-│       ├── inference.py
-│       ├── make-testprompt.py
-│       ├── make-train-random.py
-│       ├── make-trainprompt-db.py
-│       ├── Merge-allpairwise-testprompt.py
+│       ├── processing-format.ipynb
+│       ├── merge-allpairwise-testprompt.py
 │       ├── fix-pointwise-trainprompt.py
-│       ├── fix-pointwise-testprompt.py
-│       ├── train.py
-│       └── zerotest.py
-│   ├── 2-train-and-inference
+│       └── fix-pointwise-testprompt.py
+│   ├── train-and-inference
 │       ├── listwise
 │           ├── merged_model
 │           ├── results
@@ -218,6 +211,13 @@ After inference is completed, copy the output file inference.txt to the ./RecRan
 │           ├── merged_model
 │           ├── results
 │           ├── trained_model
+│       ├── gptinference.py
+│       ├── inference.py
+│       ├── make-testprompt.py
+│       ├── make-train-random.py
+│       ├── make-trainprompt-db.py
+│       ├── train.py
+│       └── zeroshot.py
 │   ├── base
 │       ├── graph_recommender.py
 │       ├── recommender.py
@@ -289,7 +289,7 @@ After inference is completed, copy the output file inference.txt to the ./RecRan
 │       ├── sampler.py
 │       └── structure.py
 │   ├── SELFRec.py
-│   ├── top_k_recommendation.py
+│   ├── top-k-recommendation.py
 │   └── requirements.txt
 └── README.md
 ```
