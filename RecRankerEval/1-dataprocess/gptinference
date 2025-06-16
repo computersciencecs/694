@@ -91,7 +91,7 @@ def my_test(data_path, start=0, end=MAX_INT, batch_size=1):
 def parse_args():
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_file", type=str, default="listwise.jsonl") 
+    parser.add_argument("--data_file", type=str, default="pointwisetest.jsonl") 
     parser.add_argument("--start", type=int, default=0)  
     parser.add_argument("--end", type=int, default=MAX_INT) 
     parser.add_argument("--batch_size", type=int, default=10) 
