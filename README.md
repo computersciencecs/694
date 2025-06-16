@@ -101,7 +101,7 @@ Replace the dataset name in the corresponding initial recommendation model conf 
 Replace the dataset name in the top_k_recommendation.py file;
 Create a new dataset in ./RecRankerEval/dataset, and create a model_result subfolder in the dataset.
 
-## 4 – Build train prompts and train
+## 4 – Build Training Prompts and Instruction-Tune the LLM
 
 ### Organise input files for train prompts
 
