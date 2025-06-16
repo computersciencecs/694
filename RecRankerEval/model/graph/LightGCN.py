@@ -8,9 +8,9 @@ from util.sampler import next_batch_pairwise
 from base.torch_interface import TorchGraphInterface
 from util.loss_torch import bpr_loss, l2_reg_loss
 
-class Light1(GraphRecommender):
+class LightGCN(GraphRecommender):
     def __init__(self, conf, training_set, test_set, valid_set, dislike_set):
-        super(Light1, self).__init__(conf, training_set, test_set, valid_set, dislike_set)
+        super(LightGCN, self).__init__(conf, training_set, test_set, valid_set, dislike_set)
         args = self.config['LightGCN']
         self.n_layers = 2
         self.model = LGCN_Encoder(self.data, self.emb_size, self.n_layers)
@@ -53,12 +53,12 @@ class Light1(GraphRecommender):
         
         
         # Save mappings
-        with open('ml-100k_user_id_mapping.pkl', 'wb') as f:
+        with open('user_id_mapping.pkl', 'wb') as f:
             pickle.dump(self.user_id_mapping, f)
-        with open('ml-100k_item_id_mapping.pkl', 'wb') as f:
+        with open('item_id_mapping.pkl', 'wb') as f:
             pickle.dump(self.item_id_mapping, f)
      
-        with open('ml-100k_item_id_mapping-all.pkl', 'wb') as f:
+        with open('item_id_mapping-all.pkl', 'wb') as f:
             pickle.dump(self.item_id_mapping, f)
         print(f"✅ Mapping files saved! Total items (train+test+dislike): {len(self.item_id_mapping)}")
 
@@ -74,7 +74,7 @@ class Light1(GraphRecommender):
                 rating_matrix[u, i] = row['r']
 
         # Save rating matrix
-        with open('ml-100k_rating_matrix.pkl', 'wb') as f:
+        with open('rating_matrix.pkl', 'wb') as f:
             pickle.dump(rating_matrix, f)
         
     def train(self):
@@ -126,9 +126,9 @@ class Light1(GraphRecommender):
         cm_item_dict = {str(item_id): item_emb_array[idx] for item_id, idx in self.item_id_mapping.items()}
         
        
-        with open('ml-100k_user.pkl', 'wb') as f:
+        with open('user.pkl', 'wb') as f:
             pickle.dump(cm_user_dict, f) 
-        with open('ml-100k_item.pkl', 'wb') as f:
+        with open('item.pkl', 'wb') as f:
             pickle.dump(cm_item_dict, f)  
 
         print("✅ Complete user & item embeddings are saved, including all data in training & test sets!")
@@ -140,7 +140,7 @@ class Light1(GraphRecommender):
             for user_id, user_idx in self.user_id_mapping.items()
             for item_id, item_idx in self.item_id_mapping.items()
         }
-        with open('ml-100k_pred.pkl', 'wb') as f:
+        with open('pred.pkl', 'wb') as f:
             pickle.dump(cm_pred_dict, f)
 
         print("✅ User & item embeddings saved!")
@@ -190,9 +190,9 @@ class Light1(GraphRecommender):
         cm_item_dict = {str(item_id): item_emb_array[idx] for item_id, idx in self.item_id_mapping.items()}
     
    
-        with open('ml-100k_user.pkl', 'wb') as f:
+        with open('user.pkl', 'wb') as f:
             pickle.dump(cm_user_dict, f)  
-        with open('ml-100k_item.pkl', 'wb') as f:
+        with open('item.pkl', 'wb') as f:
             pickle.dump(cm_item_dict, f) 
     
         print("✅ Complete user & item embeddings are saved, including all data in training & test sets!")
@@ -209,7 +209,7 @@ class Light1(GraphRecommender):
         print(f"✅ cm_pred_dict created with {len(cm_pred_dict)} entries")
     
         
-        with open('ml-100k_pred.pkl', 'wb') as f:
+        with open('pred.pkl', 'wb') as f:
             pickle.dump(cm_pred_dict, f)
     
         print("✅ User & item embeddings saved!")
@@ -264,9 +264,9 @@ class Light1(GraphRecommender):
         cm_item_dict = {str(item_id): item_emb_array[idx] for item_id, idx in self.item_id_mapping.items()}
     
         
-        with open('ml-100k_user.pkl', 'wb') as f:
+        with open('user.pkl', 'wb') as f:
             pickle.dump(cm_user_dict, f)
-        with open('ml-100k_item.pkl', 'wb') as f:
+        with open('item.pkl', 'wb') as f:
             pickle.dump(cm_item_dict, f)
     
         print("✅ All training & testing items embeddings saved!")
@@ -283,7 +283,7 @@ class Light1(GraphRecommender):
         print(f"✅ cm_pred_dict created with {len(cm_pred_dict)} entries")
     
        
-        with open('ml-100k_pred.pkl', 'wb') as f:
+        with open('pred.pkl', 'wb') as f:
             pickle.dump(cm_pred_dict, f)
     
         print("✅ User & item embeddings saved!")
