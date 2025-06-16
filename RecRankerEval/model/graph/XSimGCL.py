@@ -12,6 +12,8 @@ import numpy as np
 
 
 class XSimGCL(GraphRecommender):
+
+    
     def __init__(self, conf, training_set, test_set, valid_set, dislike_set):
         super(XSimGCL, self).__init__(conf, training_set, test_set, valid_set, dislike_set)
         args = self.config['XSimGCL']
@@ -69,13 +71,13 @@ class XSimGCL(GraphRecommender):
         
 
         
-        with open('ml-100k_user_id_mapping.pkl', 'wb') as f:
+        with open('user_id_mapping.pkl', 'wb') as f:
             pickle.dump(self.user_id_mapping, f)
-        with open('ml-100k_item_id_mapping.pkl', 'wb') as f:
+        with open('item_id_mapping.pkl', 'wb') as f:
             pickle.dump(self.item_id_mapping, f)
         
         
-        with open('ml-100k_item_id_mapping-all.pkl', 'wb') as f:
+        with open('item_id_mapping-all.pkl', 'wb') as f:
             pickle.dump(self.item_id_mapping, f)
         print(f"✅ Mapping files saved! Total items (train+test+dislike): {len(self.item_id_mapping)}")
 
@@ -91,7 +93,7 @@ class XSimGCL(GraphRecommender):
                 rating_matrix[u, i] = row['r']
 
         # Save rating matrix
-        with open('ml-100k_rating_matrix.pkl', 'wb') as f:
+        with open('rating_matrix.pkl', 'wb') as f:
             pickle.dump(rating_matrix, f)
 
     def train(self):
@@ -184,9 +186,9 @@ class XSimGCL(GraphRecommender):
         cm_item_dict = {str(item_id): item_emb_array[idx] for item_id, idx in self.item_id_mapping.items()}
     
       
-        with open('ml-100k_user.pkl', 'wb') as f:
+        with open('user.pkl', 'wb') as f:
             pickle.dump(cm_user_dict, f)
-        with open('ml-100k_item.pkl', 'wb') as f:
+        with open('item.pkl', 'wb') as f:
             pickle.dump(cm_item_dict, f)
     
         print("✅ All training & testing items embeddings saved!")
@@ -203,7 +205,7 @@ class XSimGCL(GraphRecommender):
         print(f"✅ cm_pred_dict created with {len(cm_pred_dict)} entries")
     
         
-        with open('ml-100k_pred.pkl', 'wb') as f:
+        with open('pred.pkl', 'wb') as f:
             pickle.dump(cm_pred_dict, f)
     
         print("✅ User & item embeddings saved!")
