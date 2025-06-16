@@ -9,7 +9,7 @@ random.seed(42)
 np.random.seed(42)
 dataset_names = ['ml-100k']
 isHint = True
-sample_method = 'random'  # importance
+sample_method = 'uniform'  # importance
 for dataset_name in dataset_names:
     if dataset_name == 'ml-100k':
         df_like = pd.read_csv('./train_set.txt', names=['u', 'i', 'r', 't'], sep=' ')
@@ -42,46 +42,27 @@ for dataset_name in dataset_names:
 
     import pickle
 
-    with open('./ml-100k_item.pkl', "rb") as file:
+    with open('./item.pkl', "rb") as file:
         cm_item = pickle.load(file)
-    with open('./ml-100k_user.pkl', "rb") as file:
+    with open('./user.pkl', "rb") as file:
         cm_user = pickle.load(file)
-    with open('./ml-100k_pred.pkl', "rb") as file:
+    with open('./pred.pkl', "rb") as file:
         cm_pred = pickle.load(file)    
-    with open('./ml-100k_item_id_mapping.pkl', "rb") as file:
+    with open('./item_id_mapping.pkl', "rb") as file:
         mf_item = pickle.load(file)
-    with open('./ml-100k_item_id_mapping-all.pkl', "rb") as file:
+    with open('./item_id_mapping-all.pkl', "rb") as file:
         all_item = pickle.load(file)
-    with open('./ml-100k_user_id_mapping.pkl', "rb") as file:
+    with open('./user_id_mapping.pkl', "rb") as file:
         mf_user = pickle.load(file)
-    with open('./ml-100k_rating_matrix.pkl', "rb") as file:
+    with open('./rating_matrix.pkl', "rb") as file:
         mf_pred = pickle.load(file)
-    with open('./ml-100k_user.pkl', "rb") as file:
+    with open('./user.pkl', "rb") as file:
         cm_user_emb = pickle.load(file)
 
 
-    print(f"🔍 Sample cm_item keys: {list(cm_item.keys())[:10]}")
-    print(f"🔍 Does '1522' exist in cm_item? {'1522' in cm_item}")
-    print(f"🔍 Sample cm_pred keys: {list(cm_pred.keys())[:10]}")
-    print(f"🔍 Does ('some_user', '1522') exist in cm_pred? {('some_user', '1522') in cm_pred}")
     print(f"🔍 Total users in mf_user: {len(mf_user)}")
     print(f"🔍 Total items in mf_item: {len(mf_item)}")
     
-  
-    missing_users = ["655", "115", "26"]
-    missing_items = ["143", "79", "936"]
-    
-    for user in missing_users:
-        if user not in mf_user:
-            print(f"⚠️ User {user} NOT FOUND in user_id_mapping!")
-    
-    for item in missing_items:
-        if item not in mf_item:
-            print(f"⚠️ Item {item} NOT FOUND in item_id_mapping!")
-    
-    
-    ###print("\n🔍 Sample user mappings (first 10):", list(mf_user.items())[:10])
-    ###print("🔍 Sample item mappings (first 10):", list(mf_item.items())[:10])
     
     mes_list = []
     gt_list = []
@@ -100,10 +81,7 @@ for dataset_name in dataset_names:
 
     print(type(cm_user_emb))
     print(len(cm_user_emb))  
-    print(next(iter(cm_user_emb.items())))  
-
-
-    
+    print(next(iter(cm_user_emb.items())))      
 
     if sample_method == 'uniform':
         for i in range(sample_n):
@@ -152,11 +130,15 @@ for dataset_name in dataset_names:
             sampled_ids.extend(np.random.choice(cluster_users, samples, replace=True))
             ###sampled_ids.extend(np.random.choice(cluster_indices, samples, replace=True))
             
+        
+        mf_user_i = {v: k for k, v in mf_user.items()}
 
-        #mf_user_i = {value: key for key, value in mf_user.items()}
-        #sampled_ids = [mf_user_i[_] for _ in sampled_ids]
-        ###mf_user_i = {value: key for key, value in mf_user.items()}
-        ###sampled_ids = [mf_user_i[user_ids[_]] for _ in sampled_ids] 
+        if isinstance(sampled_ids[0], int) and isinstance(user_ids[0], str):
+            sampled_ids = [mf_user_i[user_ids[i]] for i in sampled_ids if user_ids[i] in mf_user_i]
+        else:
+            sampled_ids = [uid for uid in sampled_ids if uid in mf_user]
+
+
 
         sample_list1.extend(sampled_ids)
         from collections import Counter
@@ -179,12 +161,12 @@ for dataset_name in dataset_names:
             '''
             dfp = df_like_p[df_like_p['u'] == uni]
             if dfp.empty:
-                print(f"⚠️ Warning: No records found for user {uni} in df_like_p!")
+                print(f"1")
             my_list = dfp['i'].tolist()
             my_list_r = dfp['r'].tolist()
             
             if not my_list:
-                print(f"⚠️ Warning: No items found for user {uni}!")
+                print(f"2")
 
             rndl = [i_ for i_ in range(len(my_list))]
             random.shuffle(rndl)
@@ -197,7 +179,7 @@ for dataset_name in dataset_names:
                     my_list = [(my_list[x]) for x in rndl]
                     my_list_r = [(my_list_r[x]) for x in rndl]
             except Exception as e:
-                print(f"⚠️ Error converting item IDs to int: {e}")
+                print(f"3")
             if len(dfp) > 50:
                 topk = 50
             else:
@@ -209,41 +191,29 @@ for dataset_name in dataset_names:
             testlist = my_list[-1:]
             #mf_lable = "Unknown."
             if not testlist:
-                print(f"⚠️ Warning: Testlist is empty for user {uni} - Skipping user.")
+                #print(f"4")
                 continue 
 
             testlist_r = my_list_r[-1:]
 
-            
-            ###print(f"🔍 User {uni} - Testlist: {testlist}")
-            ###print(f"🔍 User {uni} - Trainlist: {trainlist[:5]} (showing first 5 items)")
 
-            
-            
             yy = mf_item.get(str(testlist[0]), None)
             uu = mf_user.get(str(uni), None)
 
-            
-          
-            if yy is None:
-                print(f"⚠️ Warning: Item {testlist[0]} not found in item mapping!")
-            if uu is None:
-                print(f"⚠️ Warning: User {uni} not found in user mapping!")
-            
                 
             if yy is not None and uu is not None:
                 try:
                     mf_lable = mf_pred[uu][yy]
-                    ###print("get-mf_label-=-mf_pred[uu][yy]-pointwise")
+
                 except IndexError:
-                    print(f"⚠️ IndexError: ({uu}, {yy}) out `mf_pred`  {mf_pred.shape}!")
+
                     mf_lable = 'Unknown.' 
                 except Exception as e:
-                    print(f"⚠️ Unexpected error in fetching mf_lable: {e}")
+
                     mf_lable = 'Unknown.'
             else:
                 mf_lable = 'Unknown.'
-                print('mf_lable错误')
+
             
             historical_interactions = [f'"{movie_name_dict[i]}"' for i in trainlist]
             answer_items_set = [f'"{movie_name_dict[i]}"' for i in testlist]
@@ -306,7 +276,7 @@ for dataset_name in dataset_names:
             testlist = my_list[-1:]
             
             if not trainlist:
-                print(f"⚠️ Warning: Trainlist is empty for user {uni} - Skipping user.")
+                #print(f"10")
                 continue  
                 
             neglist = []
@@ -317,30 +287,6 @@ for dataset_name in dataset_names:
 
             random_n = (random.random() > 0.5)
 
-
-
-            ###print(f"🔍 Type of cm_item: {type(cm_item)}")
-            ###print(f"🔍 Type of cm_user: {type(cm_user)}")
-
-
-
-            
-            ###print(f"🔍 User {uni} - Testlist: {testlist}")
-            ###print(f"🔍 User {uni} - Trainlist: {trainlist[:5]} (showing first 5 items)")
-            ###print(f"🔍 False Items: {neglist}")
-            ###print(f"🔍 Checking movie_name_dict keys (first 10): {list(movie_name_dict.keys())[:10]}")
-            ###print(f"🔍 Type of cm_item: {type(cm_item)}")
-            ###print(f"✅ cm_item is a dictionary! Sample: {list(cm_item.items())[:10]}")
-            ###print(f"🔍 Type of cm_user: {type(cm_user)}")
-            ###print(f"✅ cm_user is a dictionary! Sample keys: {list(cm_user.keys())[:10]}")
-            
-           
-            if not trainlist:
-                print(f"⚠️ Warning: Trainlist is empty for user {uni}!")
-            if not neglist:
-                print(f"⚠️ Warning: Neglist is empty for user {uni}!")
-            if not testlist:
-                print(f"⚠️ Warning: Testlist is empty for user {uni}!")
             
             historical_interactions = [f'"{movie_name_dict[i]}"' for i in trainlist]
 
@@ -348,27 +294,9 @@ for dataset_name in dataset_names:
 
             answer_items_set = [f'"{movie_name_dict[i]}"' for i in testlist]
             
-            if not historical_interactions:
-                print(f"⚠️ Warning: historical_interactions is empty for user {uni}!")
-            if not false_items_set:
-                print(f"⚠️ Warning: false_items_set is empty for user {uni}!")
-            if not answer_items_set:
-                print(f"⚠️ Warning: answer_items_set is empty for user {uni}!")
 
-            #print(f"🔍 Type of cm_pred: {type(cm_pred)}")
-            #if isinstance(cm_pred, dict):
-                #print(f"🔍 Sample keys in cm_pred: {list(cm_pred.keys())[:10]}")
-            #elif isinstance(cm_pred, np.ndarray):
-                #print(f"🔍 Shape of cm_pred: {cm_pred.shape}")
 
             sample_cm_item_keys = list(cm_item.keys())[:10]
-            ####print(f"🔍 Sample cm_item keys: {sample_cm_item_keys}")
-            ####print(f"🔍 Type of first cm_item key: {type(sample_cm_item_keys[0])}")
-            #print(f"🔍 Type of neglist[0]: {type(neglist[0])} | Value: {neglist[0]}")
-            #print(f"🔍 Type of testlist[0]: {type(testlist[0])} | Value: {testlist[0]}")
-            #print(f"🔍 Checking if {neglist[0]} exists in cm_item keys: {'Yes' if str(neglist[0]) in cm_item else 'No'}")
-            #print(f"🔍 Checking if {testlist[0]} exists in cm_item keys: {'Yes' if str(testlist[0]) in cm_item else 'No'}")
-
 
             
             try:
@@ -379,12 +307,6 @@ for dataset_name in dataset_names:
                 #uu = cm_user[str(uni)]
                 uu = cm_user.get(str(uni), None)
                 
-                if xx is None:
-                    print(f"⚠️ Warning: Item {neglist[0]} not found in neglist cm_item!")
-                if yy is None:
-                    print(f"⚠️ Warning: Item {testlist[0]} not found in testlist cm_item!")
-                if uu is None:
-                    print(f"⚠️ Warning: User {uni} not found in cm_user!")
                 
                 if xx is not None and yy is not None and uu is not None:
                     #if cm_pred[uu][yy] > cm_pred[uu][xx]:
@@ -514,10 +436,6 @@ for dataset_name in dataset_names:
                         ##yy = cm_item.get(str(j_), None)  
                         #uu = cm_user[str(uni)]
                         uu = cm_user.get(str(uni), None)
-                        if yy is None:
-                            print(f"⚠️ Warning: Item {j_} not found in cm_item!")
-                        if uu is None:
-                            print(f"⚠️ Warning: User {uni} not found in cm_user!")
                  
                         #str_yy = str(yy)
                         int_yy = int(j_)
@@ -528,34 +446,21 @@ for dataset_name in dataset_names:
                         if int_uu < mf_pred.shape[0] and int_yy < mf_pred.shape[1]:
                         #if str_yy in mf_pred and str_uu in mf_pred[str_yy]:
                             mf_label = mf_pred[int_uu][int_yy]
-                            ######print(f"✅ Found prediction for (User: {uni} -> {int_uu}, Item: {j_} -> {int_yy}) -> {mf_label}")
                         else:
                             mf_label = 1.5
-                            print(f"⚠️ Warning: Prediction not found for (User: {uni}, Item: {j_}) in mf_pred!")
                 
                     except KeyError:
-                        print(f"❌ KeyError: Item {j_} or User {uni} not found in cm_item/cm_user!")
                         mf_label = 1.5
                     except IndexError as e:
-                        print(f"❌ IndexError: {e} - Possible out-of-bounds in `mf_pred`!")
                         mf_label = 1.5
                     except ValueError as e:
-                        print(f"❌ ValueError: {e} - `yy` or `uu` conversion issue!")
                         mf_label = 1.5
                     except Exception as e:
-                        print(f"❌ Unexpected error: {e}")
                         mf_label = 1.5
                 
                     total_list_mf.append(mf_label)                       
                         
                         
-                        
-                        #mf_label = mf_pred[uu][yy]
-                        #print('1')
-                    #except Exception:
-                        #mf_label = 1.5
-                        #print('meizhaodao')
-                    #total_list_mf.append(mf_label)
 
                 total_list_mf_idx = sort_list_reverse_with_indices(total_list_mf)
                 total_list_mf_idx = total_list_mf_idx[:5]
@@ -596,13 +501,9 @@ for dataset_name in dataset_names:
                 continue
 
 
-    with jsonlines.open(f'./pointwiserandom.jsonl', mode='w') as writer:
+    with jsonlines.open(f'./pointwise.jsonl', mode='w') as writer:
         writer.write_all(mes_list_pointwise)
-    with jsonlines.open(f'./pairwiserandom.jsonl', mode='w') as writer:
+    with jsonlines.open(f'./pairwise.jsonl', mode='w') as writer:
         writer.write_all(mes_list_pairwise)
-    #with jsonlines.open(f'./test_ml-1m_lightKG_pairwise_inv-pre-3kg.jsonl', mode='w') as writer:
-        #writer.write_all(mes_list_pairwise_inv)
-    with jsonlines.open(f'./listwiserandom.jsonl', mode='w') as writer:
+    with jsonlines.open(f'./listwise.jsonl', mode='w') as writer:
         writer.write_all(mes_list_listwise)
-    with jsonlines.open(f'/data_allrandom.jsonl', mode='w') as writer:
-        writer.write_all(mes_list)
