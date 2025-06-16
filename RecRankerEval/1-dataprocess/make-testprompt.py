@@ -18,21 +18,21 @@ isHint = True
 
 for dataset_name in dataset_names:
     
-    with open('./ml-100k_item.pkl', "rb") as file:
+    with open('./item.pkl', "rb") as file:
         cm_item = pickle.load(file)
-    with open('./ml-100k_user.pkl', "rb") as file:
+    with open('./user.pkl', "rb") as file:
         cm_user = pickle.load(file)
-    with open('./ml-100k_pred.pkl', "rb") as file:
+    with open('./pred.pkl', "rb") as file:
         cm_pred = pickle.load(file)    
-    with open('./ml-100k_item_id_mapping.pkl', "rb") as file:
+    with open('./item_id_mapping.pkl', "rb") as file:
         mf_item = pickle.load(file)
-    with open('./ml-100k_item_id_mapping-all.pkl', "rb") as file:
+    with open('./item_id_mapping-all.pkl', "rb") as file:
         all_item = pickle.load(file)
-    with open('./ml-100k_user_id_mapping.pkl', "rb") as file:
+    with open('./user_id_mapping.pkl', "rb") as file:
         mf_user = pickle.load(file)
-    with open('./ml-100k_rating_matrix.pkl', "rb") as file:
+    with open('./rating_matrix.pkl', "rb") as file:
         mf_pred = pickle.load(file)
-    with open('./ml-100k_user.pkl', "rb") as file:
+    with open('./user.pkl', "rb") as file:
         cm_user_emb = pickle.load(file)
 
 
@@ -52,9 +52,9 @@ for dataset_name in dataset_names:
     for model_name in model_names:
 
         idd = '1'
-        rec_list = pd.read_csv('./Light1rec_save_dict1.csv', header=None,
+        rec_list = pd.read_csv('./LightGCNrec_save_dict2.csv', header=None,
                                names=['v' + str(i) for i in range(11)])
-        gt_list = pd.read_csv('./Light1gt_save_dict1.csv', header=None,
+        gt_list = pd.read_csv('./LightGCNgt_save_dict2.csv', header=None,
                               names=['u', 'i'])
 
         mov_id = gt_list['i'].tolist()
@@ -197,7 +197,7 @@ for dataset_name in dataset_names:
                             cm_lable = 'No.'
                     else:
                         cm_lable = 'Unknown.'
-                        print('pairwise不知道')
+                        print('pairwiseUnknown')
                 except IndexError as e:
                     print(f"⚠️ IndexError: {e}")
                     cm_lable = 'Unknown.'
@@ -400,23 +400,22 @@ for dataset_name in dataset_names:
                 mes_list_pointwise.append(fi)
 
         with jsonlines.open(
-                f'./test_{dataset_name}_{model_name}_pointwise.jsonl',
+                f'./pointwisetest.jsonl',
                 mode='w') as writer:
             writer.write_all(mes_list_pointwise)
         with jsonlines.open(
-                f'./test_{dataset_name}_{model_name}_pairwise.jsonl',
+                f'./pairwisetest.jsonl',
                 mode='w') as writer:
             writer.write_all(mes_list_pairwise)
         with jsonlines.open(
-                f'./test_{dataset_name}_{model_name}_pairwise_inv.jsonl',
+                f'./pairwise_invtest.jsonl',
                 mode='w') as writer:
             writer.write_all(mes_list_pairwise_inv)
         with jsonlines.open(
-                f'./test_{dataset_name}_{model_name}_listwise.jsonl',
+                f'./listwisetest.jsonl',
                 mode='w') as writer:
             writer.write_all(mes_list_listwise)
 
         df = pd.DataFrame(my_ran_list)
         #df.to_csv(f'./{dataset_name}/my_test_list{model_name}.txt', header=None, index=None)
         print("finished")
- 
