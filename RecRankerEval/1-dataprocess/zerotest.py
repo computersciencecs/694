@@ -34,8 +34,7 @@ def my_test(model, data_path, start=0, end=MAX_INT, batch_size=1, tensor_paralle
     llm = LLM(model=model, tensor_parallel_size=tensor_parallel_size)
 
     for kkk in ['LightGCN']:  # , 'SASRec','BERT4Rec','CL4SRec''SGL','MF', 'LightGCN', 'SGL',
-        #data_path = './test_amazon-book_lightKG_listwise-base.jsonl'
-        data_path = './test_ml-100k_LightGCN_listwise.jsonl'
+        data_path = './pointwisetest.jsonl'
         INVALID_ANS = "[invalid]"
         res_ins = []
         res_answers = []
