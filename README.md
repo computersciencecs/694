@@ -75,7 +75,7 @@ RecRankerEval supports the use of different initial recommendation models.
 The name of the initial recommendation model can be modified in the running code, for example:
 
 ```python
-!python top_k_recommendation.py --model MF
+!python top_k_recommendation.py --model LightGCN
 ```
 
 RecRankerEval can enable users to extend and replace the initial recommendation model for use.
@@ -90,7 +90,7 @@ In addition, RecRankerEval supports users to change the dataset to run the initi
 If it is an existing dataset, the user can directly modify the name of the dataset in the running code, for example:
 
 ```python
-!python top_k_recommendation.py --dataset ml-100k
+!python top_k_recommendation.py --dataset ml-1m
 ```
 
 If the user wants to add additional datasets, follow the steps below:
@@ -114,7 +114,7 @@ Run make-train-random.py or make-trainprompt-db.py in the ./RecRankerEval/1-data
 Users can change the sample_method in the file to implement different user sampling methods.
 
 ### Train the LLM
-In the ./RecRankerEval/2-train-and-inference directory, copy train.py to the corresponding ranking method folder for training.
+In the ./RecRankerEval/2-train-and-inference directory, copy train.py to the corresponding instruction tuning method folder for training.
 Copy the training jsonl file of the ranking method generated in the ./RecRankerEval/1-dataprocess/ directory to the corresponding ranking method folder in the ./RecRankerEval/2-train-and-inference directory as input.
 Set OpenAI API key in train.py: os.environ["HF_TOKEN"] = " ".
 Run train.py.
@@ -123,7 +123,7 @@ Run train.py.
 !python train.py \
   --token  \
   --model_name meta-llama/Llama-2-7b-hf \
-  --data_path ./listwise.jsonl \
+  --data_path ./pointwsie.jsonl \
   --output_dir ./results \
   --epochs 3 \
   --batch_size 2 \
@@ -152,9 +152,9 @@ Run make-testprompt in the ./RecRankerEval/1-dataprocess/ directory to pointwise
 
 * Configure the fifth dimension of RecRankerEval - instruction tuning method
 
-In the ./RecRankerEval/2-train-and-inference directory, copy inference.py to the corresponding ranking method folder for inference.
-Copy the inference jsonl file of the ranking method generated in the ./RecRankerEval/1-dataprocess/ directory to the corresponding ranking method folder in the ./RecRankerEval/2-train-and-inference directory as input.
-Among them, for the pairwise instruction adjustment method, you need to run ./RecRankerEval/1-dataprocess/Merge-allpairwise-testprompt.py first to merge the two jsonl files for forward and reverse comparison.
+In the ./RecRankerEval/2-train-and-inference directory, copy inference.py to the corresponding instruction tuning method folder for inference.
+Copy the inference jsonl file of the ranking method generated in the ./RecRankerEval/1-dataprocess/ directory to the corresponding instruction tuning method folder in the ./RecRankerEval/2-train-and-inference directory as input.
+Among them, for the pairwise instruction tuning method, user needs to run ./RecRankerEval/1-dataprocess/Merge-allpairwise-testprompt.py first to merge the two jsonl files for forward and reverse comparison.
 The input is pairwisetest.jsonl and pairwise_invtest.jsonl, and the output is pairwiseall.jsonl.
 
 For pointwise without data leakage, we provide two files to process the training and reasoning prompts of pointwise respectively.
@@ -286,5 +286,6 @@ After inference is completed, copy the output file inference.txt to the ./RecRan
 │   ├── SELFRec.py
 │   ├── top_k_recommendation.py
 │   └── requirements.txt
+└── README.md
 ```
 ```
