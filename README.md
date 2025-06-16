@@ -141,7 +141,7 @@ RecRankerEval supports using different LLM backbones.
 If the user uses an additional fine-tunable LLM, the model_name can be switched to meta-llama/Llama-3.1-8B-Instruct in the training command.
 If the user uses non-fine-tunable gpt or zero shot, the user can copy gptinference.py or zerotest.py in the ./RecRankerEval/1-dataprocess/ directory to the corresponding instruction adjustment folder in the ./RecRankerEval/2-train-and-inference directory, set the OpenAI API key and run.
 
-## 5 – Build inference prompts and inference
+## 5 – Build Test Prompts and Run Inference with the Instruction-Tuned LLM
 
 ### Organise input files for inference prompts
 
