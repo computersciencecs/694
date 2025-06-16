@@ -1,8 +1,8 @@
 import jsonlines
 import re
 
-input_file = "test_ml-100k_LightGCN_pointwise.jsonl"
-output_file = "cleaned.jsonl"
+input_file = "pointwisetest.jsonl"
+output_file = "pointwisetestfix.jsonl"
 
 modified_count = 0
 total_count = 0
