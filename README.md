@@ -146,7 +146,7 @@ Put all input files in the ./RecRankerEval/1-dataprocess/ directory.
 
 ### Build inference prompts
 
-Run make-testprompt in the ./RecRankerEval/1-dataprocess/ directory to pointwisetest.jsonl, pairwisetest.jsonl and listwisetest.jsonl for inference respectively.
+Run make-testprompt in the ./RecRankerEval/1-dataprocess/ directory to pointwisetest.jsonl, pairwisetest.jsonl, pairwise_invtest.jsonl and listwisetest.jsonl for inference respectively.
 
 ### Inference the LLM
 
@@ -154,6 +154,8 @@ Run make-testprompt in the ./RecRankerEval/1-dataprocess/ directory to pointwise
 
 In the ./RecRankerEval/2-train-and-inference directory, copy inference.py to the corresponding ranking method folder for inference.
 Copy the inference jsonl file of the ranking method generated in the ./RecRankerEval/1-dataprocess/ directory to the corresponding ranking method folder in the ./RecRankerEval/2-train-and-inference directory as input.
+Among them, for the pairwise instruction adjustment method, you need to run ./RecRankerEval/1-dataprocess/Merge-allpairwise-testprompt.py first to merge the two jsonl files for forward and reverse comparison.
+The input is pairwisetest.jsonl and pairwise_invtest.jsonl, and the output is pairwiseall.jsonl.
 Run inference.py.
 The output is inference.txt.
 
