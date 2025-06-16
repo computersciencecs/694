@@ -28,6 +28,7 @@ pip install peft==0.13.2
 ```
 
 ## 2 – Process the original dataset
+
 * Load original dataset
 
 All the original rating.csv files and item.csv files are in the ./RecRankerEval/dataset directory.
@@ -114,6 +115,7 @@ Run make-train-random.py or make-trainprompt-db.py in the ./RecRankerEval/1-data
 Users can change the sample_method in the file to implement different user sampling methods.
 
 ### Train the LLM
+
 In the ./RecRankerEval/2-train-and-inference directory, copy train.py to the corresponding instruction tuning method folder for training.
 Copy the training jsonl file of the ranking method generated in the ./RecRankerEval/1-dataprocess/ directory to the corresponding ranking method folder in the ./RecRankerEval/2-train-and-inference directory as input.
 Set OpenAI API key in train.py: os.environ["HF_TOKEN"] = " ".
@@ -132,6 +134,7 @@ Run train.py.
 ```
 
 * Configure the forth dimension of RecRankerEval - LLM backbone
+
 RecRankerEval supports using different LLM backbones.
 If the user uses an additional fine-tunable LLM, the model_name can be switched to meta-llama/Llama-3.1-8B-Instruct in the training command.
 If the user uses non-fine-tunable gpt or zero shot, the user can copy gptinference.py or zerotest.py in the ./RecRankerEval/1-dataprocess/ directory to the corresponding instruction adjustment folder in the ./RecRankerEval/2-train-and-inference directory, set the OpenAI API key and run.
