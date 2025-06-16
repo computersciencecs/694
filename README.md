@@ -1,6 +1,8 @@
 # RecRankerEval: A Reproducible Framework for Deploying and Evaluating LLM-based Top-k Recommenders
 
 This repository hosts the code of RecRankerEval. 
+This project builds upon and extends components from SELFRec and RecRanker. 
+We sincerely thank the authors for their open-source contributions, which greatly facilitated our work.
 
 ## 1 – Install
 * Install environment
