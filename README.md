@@ -191,6 +191,8 @@ After inference is completed, copy the output file inference.txt to the ./RecRan
 │       ├── make-train-random.py
 │       ├── make-trainprompt-db.py
 │       ├── Merge-allpairwise-testprompt.py
+│       ├── fix-pointwise-trainprompt.py
+│       ├── fix-pointwise-testprompt.py
 │       ├── train.py
 │       └── zerotest.py
 │   ├── 2-train-and-inference
