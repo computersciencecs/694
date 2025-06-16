@@ -156,6 +156,11 @@ In the ./RecRankerEval/2-train-and-inference directory, copy inference.py to the
 Copy the inference jsonl file of the ranking method generated in the ./RecRankerEval/1-dataprocess/ directory to the corresponding ranking method folder in the ./RecRankerEval/2-train-and-inference directory as input.
 Among them, for the pairwise instruction adjustment method, you need to run ./RecRankerEval/1-dataprocess/Merge-allpairwise-testprompt.py first to merge the two jsonl files for forward and reverse comparison.
 The input is pairwisetest.jsonl and pairwise_invtest.jsonl, and the output is pairwiseall.jsonl.
+
+For pointwise without data leakage, we provide two files to process the training and reasoning prompts of pointwise respectively.
+./RecRankerEval/1-dataprocess/fix-pointwise-trainprompt.py is used to process the training prompt of pointwsie: the input is pointwise.jsonl and the output is pointwise_processed.jsonl.
+./RecRankerEval/1-dataprocess/fix-pointwise-testprompt.py is used to process the reasoning prompt of pointwsie: the input is pointwisetest.jsonl and the output is pointwisetestfix.jsonl.
+
 Run inference.py.
 The output is inference.txt.
 
