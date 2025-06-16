@@ -75,8 +75,7 @@ def my_test(model_path, data_path, start=0, end=MAX_INT, batch_size=1, tensor_pa
     llm = LLM(model=model_path, tensor_parallel_size=tensor_parallel_size)
 
     for kkk in ['LightGCN']:  # , 'SASRec','BERT4Rec','CL4SRec''SGL','MF', 'LightGCN', 'SGL',
-        data_path = './test_music_LightGCN_listwise.jsonl'
-        #data_path = './test1.jsonl'
+        data_path = './pointwisetest.jsonl'
         INVALID_ANS = "[invalid]"
         res_ins = []
         res_answers = []
@@ -126,7 +125,7 @@ def my_test(model_path, data_path, start=0, end=MAX_INT, batch_size=1, tensor_pa
         import pandas as pd
         df = pd.DataFrame(res_completions)
         #df.to_csv('./res_completionsLightGCN_kg_1_fine.txt', index=None, header=None)
-        df.to_csv('./list-100k-mf.txt', index=None, header=None)
+        df.to_csv('./inference.txt', index=None, header=None)
 
 
 def parse_args():
