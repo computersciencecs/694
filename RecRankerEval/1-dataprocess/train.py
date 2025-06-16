@@ -1,174 +1,144 @@
 import os
-
-
-from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments
-from datasets import load_dataset
 import torch
-from peft import get_peft_model, LoraConfig, TaskType
+import argparse
 import numpy as np
-
-from transformers import default_data_collator
-
-
-
-os.environ["HF_TOKEN"] = ""
-
-model_name = 'meta-llama/Llama-2-7b-hf'  
-
-
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, token=os.environ["HF_TOKEN"])
-tokenizer = AutoTokenizer.from_pretrained(model_name, token=os.environ["HF_TOKEN"])
-
-
-if tokenizer.pad_token is None:
-    tokenizer.pad_token = tokenizer.eos_token
-    model.config.pad_token_id = model.config.eos_token_id
-###if tokenizer.pad_token is None:
-    ###tokenizer.add_special_tokens({'pad_token': '[PAD]'})
-    ###model.resize_token_embeddings(len(tokenizer))
-    ###model.config.pad_token_id = tokenizer.pad_token_id
-
-peft_config = LoraConfig(
-    task_type=TaskType.CAUSAL_LM,
-    r=8,
-    #r=16,
-    lora_alpha=32,
-    lora_dropout=0.1,
-    target_modules=["q_proj", "v_proj"]  
-
+from datasets import load_dataset
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+    default_data_collator,
 )
-model = get_peft_model(model, peft_config)
+from peft import get_peft_model, LoraConfig, TaskType
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Fine-tune LLaMA with LoRA on a JSONL dataset.")
+    
+    parser.add_argument("--model_name", type=str, default="meta-llama/Llama-2-7b-hf")
+    parser.add_argument("--token", type=str, required=True, help="HuggingFace token")
+    parser.add_argument("--data_path", type=str, default="./listwise.jsonl")
+    parser.add_argument("--output_dir", type=str, default="./results")
+    parser.add_argument("--epochs", type=int, default=3)
+    parser.add_argument("--batch_size", type=int, default=2)
+    parser.add_argument("--grad_acc_steps", type=int, default=64)
+    parser.add_argument("--lr", type=float, default=2e-5)
+    parser.add_argument("--max_length", type=int, default=2048)
+    
+    return parser.parse_args()
 
 
-dataset = load_dataset("json", data_files="./listwise.jsonl")
+def load_model_and_tokenizer(model_name, token):
+    tokenizer = AutoTokenizer.from_pretrained(model_name, token=token)
+    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, token=token)
+
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        model.config.pad_token_id = model.config.eos_token_id
+
+    peft_config = LoraConfig(
+        task_type=TaskType.CAUSAL_LM,
+        r=8,
+        lora_alpha=32,
+        lora_dropout=0.1,
+        target_modules=["q_proj", "v_proj"]
+    )
+    model = get_peft_model(model, peft_config)
+    return model, tokenizer
 
 
+def compute_token_length_stats(dataset, tokenizer):
+    def calculate_lengths(batch):
+        lengths = []
+        for messages in batch["messages"]:
+            inputs = [
+                msg["content"][0]["content"]
+                for msg in messages if msg["role"] == "user"
+            ]
+            if len(inputs) > 1:
+                inputs = [" ".join(inputs)]
+            tokenized = tokenizer(inputs, truncation=False, padding=False)
+            lengths.extend([len(seq) for seq in tokenized["input_ids"]])
+        return {"lengths": lengths}
 
-#dataset = load_dataset("json", data_files="data_all.jsonl")
-train_dataset = dataset["train"]
+    lengths_dataset = dataset.map(calculate_lengths, batched=True)
+    all_lengths = lengths_dataset["lengths"]
+    print(f"Mean token length: {np.mean(all_lengths)}")
+    print(f"Median token length: {np.median(all_lengths)}")
+    print(f"Max token length: {np.max(all_lengths)}")
+    print(f"90/95/99 percentiles: {np.percentile(all_lengths, [90, 95, 99])}")
 
-# Initialize variables for tracking the longest instance
-max_token_length = 0
-longest_instance = None
 
-# Step 1: Calculate token lengths across the dataset
-def calculate_token_lengths(batch):
-    lengths = []
-    for messages in batch["messages"]:
-        inputs = [
-            msg["content"][0]["content"]
-            for msg in messages
-            if msg["role"] == "user"
+def preprocess_dataset(dataset, tokenizer, max_length=2048):
+    def preprocess_function(examples):
+        all_inputs, all_targets = [], []
+        for messages in examples["messages"]:
+            inputs = [msg["content"][0]["content"] for msg in messages if msg["role"] == "user"]
+            targets = [msg["content"][0]["content"] for msg in messages if msg["role"] == "assistant"]
+            all_inputs.extend(inputs)
+            all_targets.extend(targets)
+
+        model_inputs = tokenizer(all_inputs, max_length=max_length, truncation=True, padding="max_length")
+        with tokenizer.as_target_tokenizer():
+            labels = tokenizer(all_targets, max_length=max_length, truncation=True, padding="max_length")
+        model_inputs["labels"] = [
+            [-100 if token == tokenizer.pad_token_id else token for token in label]
+            for label in labels["input_ids"]
         ]
-        if len(inputs) > 1:
-            inputs = [" ".join(inputs)]
-        
-        # Tokenize without truncation or padding
-        model_inputs = tokenizer(inputs, truncation=False, padding=False)
-        lengths.extend([len(seq) for seq in model_inputs["input_ids"]])
-    
-    # Return as a list of lengths
-    return {"lengths": lengths}
+        return model_inputs
+
+    return dataset.map(preprocess_function, batched=True)
 
 
-# Step 2: Apply the function to the dataset and collect lengths
-lengths_dataset = train_dataset.map(calculate_token_lengths, batched=True)
-all_lengths = lengths_dataset["lengths"]
-
-# Step 3: Calculate summary statistics
-mean_length = np.mean(all_lengths)
-median_length = np.median(all_lengths)
-max_length = np.max(all_lengths)
-percentiles = np.percentile(all_lengths, [90, 95, 99])  # e.g., 90th, 95th, and 99th percentiles
-
-print(f"Mean token length: {mean_length}")
-print(f"Median token length: {median_length}")
-print(f"Max token length: {max_length}")
-print(f"90th percentile: {percentiles[0]}")
-print(f"95th percentile: {percentiles[1]}")
-print(f"99th percentile: {percentiles[2]}")
-
-def preprocess_function(examples):
-    all_inputs = []
-    all_targets = []
-    
-    for messages in examples["messages"]:  # Loop through each "messages" entry in the batch
-        # Extract user message content
-        inputs = [
-            msg["content"][0]["content"]
-            for msg in messages
-            if msg["role"] == "user"
-        ]
-        
-        # Extract assistant message content (target responses)
-        targets = [
-            msg["content"][0]["content"]
-            for msg in messages
-            if msg["role"] == "assistant"
-        ]
-
-        # Join inputs and targets if multiple entries are found (optional)
-        #if len(inputs) > 1:
-            #inputs = [" ".join(inputs)]
-        #if len(targets) > 1:
-            #targets = [" ".join(targets)]
-        
-        # Add processed inputs and targets to the batch lists
-        all_inputs.extend(inputs)
-        all_targets.extend(targets)
-    
-    # Tokenize inputs and targets
-    model_inputs = tokenizer(all_inputs, max_length=2048, truncation=True, padding="max_length")
-    
-    with tokenizer.as_target_tokenizer():
-        labels = tokenizer(all_targets, max_length=2048, truncation=True, padding="max_length")
-
-    # Assign labels and replace padding tokens with -100
-    model_inputs["labels"] = [
-        [-100 if token == tokenizer.pad_token_id else token for token in label]
-        for label in labels["input_ids"]
-    ]
-
-    return model_inputs
+def get_trainer(model, tokenized_dataset, args):
+    training_args = TrainingArguments(
+        output_dir=args.output_dir,
+        num_train_epochs=args.epochs,
+        per_device_train_batch_size=args.batch_size,
+        gradient_accumulation_steps=args.grad_acc_steps,
+        fp16=True,
+        learning_rate=args.lr,
+        warmup_steps=50,
+        lr_scheduler_type="cosine",
+        save_strategy="epoch",
+        save_total_limit=3,
+        report_to="none",
+    )
+    return Trainer(
+        model=model,
+        args=training_args,
+        train_dataset=tokenized_dataset,
+        data_collator=default_data_collator,
+    )
 
 
-# Apply the preprocessing function to the dataset
-tokenized_dataset = train_dataset.map(preprocess_function, batched=True)
+def train_and_save(trainer, save_path="trained_model"):
+    trainer.train()
+    trainer.save_model(save_path)
+    print(f"✅ Model saved to: {save_path}")
 
 
+def main():
+    args = parse_args()
+    os.environ["HF_TOKEN"] = args.token
+
+    print("🚀 Loading model and tokenizer...")
+    model, tokenizer = load_model_and_tokenizer(args.model_name, args.token)
+
+    print("📂 Loading dataset...")
+    raw_dataset = load_dataset("json", data_files=args.data_path)["train"]
+
+    print("📊 Analyzing token lengths...")
+    compute_token_length_stats(raw_dataset, tokenizer)
+
+    print("🧹 Preprocessing dataset...")
+    tokenized_dataset = preprocess_dataset(raw_dataset, tokenizer, max_length=args.max_length)
+
+    print("🎯 Starting training...")
+    trainer = get_trainer(model, tokenized_dataset, args)
+    train_and_save(trainer)
 
 
-training_args = TrainingArguments(
-    output_dir="./results",
-    ######num_train_epochs=1,  
-    num_train_epochs=3,
-    per_device_train_batch_size=2,
-    gradient_accumulation_steps=64,
-    fp16=True,
-    learning_rate=2e-5,
-    warmup_steps=50,
-    lr_scheduler_type="cosine",
-
-    save_strategy="epoch",
-    save_total_limit=10,
-    report_to="none",
-    #deepspeed="deepspeed_config.json", 
-)
-
-
-
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=tokenized_dataset,
-    data_collator=default_data_collator, 
-)
-
-
-
-trainer.train()
-
-
-trainer.save_model("trained_model")
+if __name__ == "__main__":
+    main()
