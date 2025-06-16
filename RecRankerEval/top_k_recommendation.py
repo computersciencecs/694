@@ -6,12 +6,12 @@ if __name__ == '__main__':
     ssl_graph_models = ['SGL', 'XSimGCL']
     sequential_baselines= ['SASRec']
     ssl_sequential_models = ['CL4SRec','DuoRec','BERT4Rec']
-    model = 'XSimGCL'
+    model = 'LightGCN'
     import time
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default='ml-100k', help='')
-    parser.add_argument("--model", type=str, default='XSimGCL', help='')
+    parser.add_argument("--dataset", type=str, default='ml-1m', help='')
+    parser.add_argument("--model", type=str, default='LightGCN', help='')
     parser.add_argument("--aug_type", type=str, default='0', help='')
     args = parser.parse_args()
     model = args.model
@@ -22,7 +22,7 @@ if __name__ == '__main__':
         print('Wrong model name!')
         exit(-1)
     conf.__setitem__('training.set',f'./dataset/{args.dataset}/train_set.txt')
-    conf.__setitem__('valid.set',f'./dataset/{args.dataset}/test_set.txt')
+    conf.__setitem__('valid.set',f'./dataset/{args.dataset}/valid_set.txt')
     conf.__setitem__('test.set',f'./dataset/{args.dataset}/test_set.txt')
     conf.__setitem__('dislike.set',f'./dataset/{args.dataset}/dislike_set.txt')
     conf.__setitem__('aug_type',args.aug_type)
