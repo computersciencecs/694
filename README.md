@@ -174,8 +174,17 @@ Put all input files in the ./RecRankerEval/train-and-inference/ directory.
 
 * Configure the third dimension of RecRankerEval - user sampling
 
-Run make-train-random.py or make-trainprompt-db.py in the ./RecRankerEval/train-and-inference/ directory to generate pointwise.jsonl, pairwise.jsonl and listwise.jsonl for training respectively.
+Run make-train-1.py or make-train-db.py in the ./RecRankerEval/train-and-inference/ directory to generate pointwise.jsonl, pairwise.jsonl and listwise.jsonl for training respectively.
 Users can change the sample_method in the file to implement different user sampling methods.
+
+```python
+python make-train-1.py --datasets ml-1m --sample-method kmeans
+```
+
+```python
+python make-train-db.py --datasets ml-1m --sample-method db
+
+```
 
 ### Organise input files for inference prompts
 
@@ -279,8 +288,8 @@ We provide an example of processing results in the ./RecRankerEval/dataprocess/p
 │       ├── gptinference.py
 │       ├── inference.py
 │       ├── make-testprompt.py
-│       ├── make-train-random.py
-│       ├── make-trainprompt-db.py
+│       ├── make-train-1.py
+│       ├── make-train-db.py
 │       ├── main.py
 │       ├── train.py
 │       └── zeroshot.py
