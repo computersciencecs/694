@@ -1,3 +1,4 @@
+# Configuration information of the initial recommendation model
 from initialRec import initialRec
 from util.conf import ModelConf
 
