@@ -1,3 +1,4 @@
+# Configuration information of the initial recommendation model
 from data.loader import FileIO
 
 
