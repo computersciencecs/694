@@ -209,15 +209,23 @@ After inference is completed, copy the output file inference.txt to the ./RecRan
 │           ├── merged_model
 │           ├── results
 │           ├── trained_model
+│           ├── checkpoint
+│               ├── adapter_config.json
+│               ├── adapter_model.safetensors
+│               ├── training_args.bin
+│           ├── pointwise.jsonl
+│           └── pointwisetest.jsonl
 │       ├── pairwise
 │           ├── merged_model
 │           ├── results
 │           ├── trained_model
+│       ├── config.py
 │       ├── gptinference.py
 │       ├── inference.py
 │       ├── make-testprompt.py
 │       ├── make-train-random.py
 │       ├── make-trainprompt-db.py
+│       ├── main.py
 │       ├── train.py
 │       └── zeroshot.py
 │   ├── base
@@ -290,7 +298,7 @@ After inference is completed, copy the output file inference.txt to the ./RecRan
 │       ├── loss_torch.py
 │       ├── sampler.py
 │       └── structure.py
-│   ├── SELFRec.py
+│   ├── initialRec.py
 │   ├── top-k-recommendation.py
 │   └── requirements.txt
 └── README.md
