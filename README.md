@@ -27,6 +27,8 @@ pip install flash-attn==2.6.3
 pip install accelerate==1.0.1
 
 pip install peft==0.13.2
+
+pip install jsonlines
 ```
 
 ## 2 – Process the original dataset
