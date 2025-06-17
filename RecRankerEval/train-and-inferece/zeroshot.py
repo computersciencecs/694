@@ -78,7 +78,7 @@ def my_test(model, data_path, start=0, end=sys.maxsize, batch_size=1, tensor_par
                     file.write(item + '\n')
         import pandas as pd
         df = pd.DataFrame(res_completions)
-        df.to_csv('./res_completions_zero.txt', index=None, header=None)
+        df.to_csv('./inference.txt', index=None, header=None)
 
 
 def parse_args():
