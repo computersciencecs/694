@@ -1,3 +1,4 @@
+# Generate prompts for three instruction tuning methods for training.
 import sys
 import random
 import pandas as pd
