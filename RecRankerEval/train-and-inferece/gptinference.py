@@ -116,23 +116,23 @@ def run_inference(data_path, start, end, batch_size, mode):
     output_file = "./res_completions_gpt35.txt"
     with open(output_file, 'w', encoding="utf-8") as file:
         file.write("\n".join(result))
-    print(f"✅ 推理完成！结果已保存到 {output_file}")
+    print(f"✅ Inference completed! Results saved to {output_file}")
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_file", type=str, required=True, help="数据路径")
-    parser.add_argument("--start", type=int, default=0, help="开始索引")
-    parser.add_argument("--end", type=int, default=MAX_INT, help="结束索引")
-    parser.add_argument("--batch_size", type=int, default=10, help="批量大小")
-    parser.add_argument("--training_type", type=str, required=True, choices=["listwise", "pairwise", "pointwise"], help="推理类型")
-    parser.add_argument("--openai_api_key", type=str, default=None, help="OpenAI API Key，可选，优先级高于环境变量")
+    parser.add_argument("--data_file", type=str, required=True, help="Data Path")
+    parser.add_argument("--start", type=int, default=0, help="Start indexing")
+    parser.add_argument("--end", type=int, default=MAX_INT, help="End Index")
+    parser.add_argument("--batch_size", type=int, default=10, help="Batch size")
+    parser.add_argument("--training_type", type=str, required=True, choices=["listwise", "pairwise", "pointwise"], help="Reasoning Type")
+    parser.add_argument("--openai_api_key", type=str, default=None, help="OpenAI API Key，Optional, takes precedence over environment variables")
     return parser.parse_args()
 
 if __name__ == "__main__":
     args = parse_args()
-    # 优先使用命令行参数，否则用环境变量
+    # Use command line parameters first, otherwise use environment variables
     api_key = args.openai_api_key or os.environ.get("OPENAI_API_KEY")
     if not api_key:
-        raise ValueError("请通过 --openai_api_key 或环境变量 OPENAI_API_KEY 提供 OpenAI API Key！")
+        raise ValueError("Please provide the OpenAI API Key via --openai_api_key or the environment variable OPENAI_API_KEY !")
     openai.api_key = api_key
     run_inference(data_path=args.data_file, start=args.start, end=args.end, batch_size=args.batch_size, mode=args.training_type)
