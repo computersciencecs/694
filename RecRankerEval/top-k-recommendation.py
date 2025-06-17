@@ -1,4 +1,4 @@
-from SELFRec import SELFRec
+from initialRec import initialRec
 from util.conf import ModelConf
 
 if __name__ == '__main__':
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     conf.__setitem__('dislike.set',f'./dataset/{args.dataset}/dislike_set.txt')
     conf.__setitem__('aug_type',args.aug_type)
     print(conf['training.set'])
-    rec = SELFRec(conf)
+    rec = initialRec(conf)
     rec.execute()
     e = time.time()
     print("Running time: %f s" % (e - s))
