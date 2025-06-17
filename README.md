@@ -11,11 +11,15 @@ We implement RecRankerEval in Python Version 3.10.13, and PyTorch Version 2.4.0+
 
 ./RecRankerEval/requirements.txt shows the environment in which the experiments are run.
 
-Install the environment according to this file, or pull the following docker image and install additional packages:
+Install the environment need to first pull the following Docker image:
 
 ```bash
 docker pull reconmmendationsystem/notebook:cuda12.1_unsloth
+```
 
+Since some packages need to be compatible with each other and will overlap during installation, the following additional packages need to be installed in order:
+
+```bash
 pip install vllm==0.6.2
 
 pip install transformers==4.45.0
