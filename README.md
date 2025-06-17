@@ -41,7 +41,7 @@ Run main.py in the ./RecRankerEval/train-and-inference/ directory:
 
 ```python
 #1 Instruction tuning Llama2 and inference
-!python main.py \
+python main.py \
   --task_type fine_tune \
   --model_type meta-llama/Llama-2-7b-hf \
   --training_type pointwise \
@@ -54,7 +54,7 @@ Run main.py in the ./RecRankerEval/train-and-inference/ directory:
 
 ```python
 #2 Instruction tuning Llama3 and inference
-!python main.py \
+python main.py \
   --task_type fine_tune \
   --model_type meta-llama/Llama-3.1-8B-Instruct \
   --training_type pointwise \
@@ -67,7 +67,7 @@ Run main.py in the ./RecRankerEval/train-and-inference/ directory:
 
 ```python
 #3 zero_shot for Llama2
-!python main.py \
+python main.py \
   --task_type zero_shot \
   --token  \
   --model_type meta-llama/Llama-2-7b-hf \
@@ -78,7 +78,7 @@ Run main.py in the ./RecRankerEval/train-and-inference/ directory:
 
 ```python
 #4 load checkpoint, instruction tuning Llama3 and inference
-!python main.py \
+python main.py \
      --task_type fine_tune \
      --model_type meta-llama/Llama-2-7b-hf \
      --training_type pointwise \
@@ -89,7 +89,7 @@ Run main.py in the ./RecRankerEval/train-and-inference/ directory:
 
 ```python
 #5 use gpt to inference
-!python main.py \
+python main.py \
   --task_type zero_shot \
   --openai_api_key  \
   --model_type gpt-3.5-turbo-0125 \
