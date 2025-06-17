@@ -1,3 +1,4 @@
+# Use the training prompt to fine-tune the LLM.
 import os
 import torch
 import argparse
