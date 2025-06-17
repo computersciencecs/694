@@ -1,3 +1,5 @@
+#This file is used to split the ml-1m dataset.
+
 import random
 like = []
 dislike = []
