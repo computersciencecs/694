@@ -214,7 +214,7 @@ The output is inference.txt.
 * Configure the forth and fifth dimension of RecRankerEval - Instruction tuning method and LLM backbone
 
 RecRankerEval supports using different LLM backbones and different instruction tuning method.
-In the command of running main.py, change task_type to zero_shot to switch to zero shot learning; change model_type to switch to Llama3 or gpt3.5; change training_type to switch to listwsie or pointwise. Detailed configuration information is located in ./RecRankerEval/train-and-inference/config.pyzhong. Quick Start provides running examples of different configurations.
+In the command of running main.py, change task_type to zero_shot to switch to zero shot learning; change model_type to switch to Llama3 or gpt3.5; change training_type to switch to listwsie or pointwise. Detailed configuration information is located in ./RecRankerEval/train-and-inference/config.py. Quick Start provides running examples of different configurations.
 
 ## 6 – Process the results
 
