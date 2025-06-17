@@ -179,13 +179,17 @@ Users can change the sample_method in the file to implement different user sampl
 
 ### Organise input files for inference prompts
 
-The input files are: train_set.txt, dislike.txt, movie_info.csv, user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, item_id_mapping-all.pkl, Modelgt_save_dict.csv and Modelrec_save_dict.
+The input files are: train_set.txt, dislike.txt, movie_info.csv, user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, item_id_mapping-all.pkl, item information file, Modelgt_save_dict.csv and Modelrec_save_dict.
 The output files are: pointwisetest.jsonl, pairwisetest.jsonl and listwisetest.jsonl.
 Put all input files in the ./RecRankerEval/train-and-inference/ directory.
 
 ### Build inference prompts
 
 Run make-testprompt.py in the ./RecRankerEval/train-and-inference/ directory to pointwisetest.jsonl, pairwisetest.jsonl, pairwise_invtest.jsonl and listwisetest.jsonl for inference respectively.
+
+```python
+python make-testprompt.py --datasets ml-1m --models LightGCN --rec-list ./Light1rec_save_dict1.csv --gt-list ./Light1gt_save_dict1.csv
+```
 
 For the pairwise instruction tuning method, user needs to run ./RecRankerEval/dataprocess/merge-allpairwise-testprompt.py first to merge the two jsonl files for forward and reverse comparison.
 The input is pairwisetest.jsonl and pairwise_invtest.jsonl, and the output is pairwiseall.jsonl.
