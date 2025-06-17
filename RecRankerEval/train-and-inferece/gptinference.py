@@ -1,3 +1,4 @@
+# This file is used for zeroshot using gpt.
 import argparse
 import jsonlines
 import openai
