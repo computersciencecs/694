@@ -235,7 +235,7 @@ The output is inference.txt.
 RecRankerEval supports using different LLM backbones and different instruction tuning method.
 In the command of running main.py, change task_type to zero_shot to switch to zero shot learning; change model_type to switch to Llama3 or gpt3.5; change training_type to switch to listwsie or pointwise. Detailed configuration information is located in ./RecRankerEval/train-and-inference/config.py. Quick Start provides running examples of different configurations.
 
-## 6.Process the output of inference for different instruction tuning methods
+## 6. Process the output of inference for different instruction tuning methods
 
 After inference is completed, copy the output file inference.txt to the ./RecRankerEval/dataprocess/process-inference-results directory, and then run the ipynb script to process the data according to the corresponding ranking method.
 We provide an example of processing results in the ./RecRankerEval/dataprocess/process-inference-results/example directory.
