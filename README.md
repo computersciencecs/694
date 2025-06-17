@@ -33,6 +33,8 @@ pip install jsonlines
 
 ## 2 – Quick Start
 
+Run main.py in the ./RecRankerEval/train-and-inference/ directory:
+
 ```python
 #1 Instruction tuning Llama2 and inference
 !python main.py \
