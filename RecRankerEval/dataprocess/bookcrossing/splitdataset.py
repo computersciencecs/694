@@ -1,3 +1,5 @@
+#This file is used to split the bookcrossing dataset.
+
 import random
 import pandas as pd
 
