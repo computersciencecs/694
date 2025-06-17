@@ -14,7 +14,7 @@ class TrainingType(Enum):
     PAIRWISE = "pairwise"
     LISTWISE = "listwise"
 
-# 训练配置
+# Training configuration
 TRAIN_CONFIG = {
     "epochs": 3,
     "batch_size": 2,
@@ -24,7 +24,7 @@ TRAIN_CONFIG = {
     "max_length": 2048
 }
 
-# 推理配置
+# Inference Configuration
 INFERENCE_CONFIG = {
     "batch_size": 80,
     "tensor_parallel_size": 1,
@@ -34,7 +34,7 @@ INFERENCE_CONFIG = {
     "max_tokens": 2048
 }
 
-# GPT推理配置
+# GPT inference configuration
 GPT_CONFIG = {
     "batch_size": 10,
     "temperature": 0.1,
@@ -42,7 +42,7 @@ GPT_CONFIG = {
     "max_tokens": 2048
 }
 
-# 文件路径配置
+# File path configuration
 FILE_PATHS = {
     "train": "train.py",
     "inference": "inference.py",
