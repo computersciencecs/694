@@ -1,3 +1,4 @@
+# Configure different instruction tuning methods, different LLMs, fine-tune first and then inference or zeroshot through the command line to implement the main program.
 import os
 import shutil
 import subprocess
