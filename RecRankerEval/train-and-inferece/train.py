@@ -92,7 +92,7 @@ def preprocess_dataset(dataset, tokenizer, max_length=2048):
 
 
 def get_trainer(model, tokenized_dataset, args):
-    # 确保输出目录存在
+    # Make sure the output directory exists
     os.makedirs(args.output_dir, exist_ok=True)
     
     training_args = TrainingArguments(
