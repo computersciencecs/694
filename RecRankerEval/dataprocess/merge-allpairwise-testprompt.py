@@ -1,3 +1,4 @@
+#This file is used to merge the prompts of the forward and reverse pairwise methods for subsequent inference.
 import json
 
 
