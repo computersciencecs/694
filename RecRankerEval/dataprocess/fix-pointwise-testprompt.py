@@ -1,4 +1,4 @@
-# This file is used to remove the hint in the training prompt of the pointwise method.
+# This file is used to remove the hint in the testing prompt of the pointwise method.
 import jsonlines
 import re
 
