@@ -1,3 +1,4 @@
+#This file is used to save different LLMs, run tasks, training configurations, and inference configurations.
 from enum import Enum
 
 class TaskType(Enum):
