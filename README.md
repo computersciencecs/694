@@ -246,7 +246,7 @@ We provide examples of processing the results of the variants with LightGCN as t
 ```python
 .
 ├── RecRankerEval
-│   ├── dataprocess
+│   ├── *dataprocess*
 │       ├── amazonmusic
 │           └── amazonmusic-data-process.ipynb
 │               └── splitdataset.py
@@ -271,7 +271,7 @@ We provide examples of processing the results of the variants with LightGCN as t
 │       ├── merge-allpairwise-testprompt.py
 │       ├── fix-pointwise-trainprompt.py
 │       └── fix-pointwise-testprompt.py
-│   ├── train-and-inference
+│   ├── *train-and-inference*
 │       ├── listwise
 │           ├── merged_model
 │           ├── results
@@ -306,7 +306,7 @@ We provide examples of processing the results of the variants with LightGCN as t
 │       ├── ssl_interface.py
 │       ├── tf_interface.py
 │       └── torch_interface.ipynb
-│   ├── conf
+│   ├── *conf*
 │       ├── LightGCN.py
 │       ├── MF.py
 │       └── XSimGCL.py
@@ -370,7 +370,7 @@ We provide examples of processing the results of the variants with LightGCN as t
 │       ├── sampler.py
 │       └── structure.py
 │   ├── initialRec.py
-│   ├── top-k-recommendation.py
+│   ├── *top-k-recommendation.py*
 │   └── requirements.txt
 └── README.md
 ```
