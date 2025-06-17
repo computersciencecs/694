@@ -39,7 +39,7 @@ pip install jsonlines
 
 Run main.py in the ./RecRankerEval/train-and-inference/ directory:
 
-### Instruction tuning Llama2 and inference
+#1 Instruction tuning Llama2 and inference
 ```python
 python main.py \
   --task_type fine_tune \
@@ -52,8 +52,8 @@ python main.py \
   --lr 2e-5
 ```
 
-```python
 #2 Instruction tuning Llama3 and inference
+```python
 python main.py \
   --task_type fine_tune \
   --model_type meta-llama/Llama-3.1-8B-Instruct \
@@ -65,8 +65,8 @@ python main.py \
   --lr 2e-5
 ```
 
-```python
 #3 zero_shot for Llama2
+```python
 python main.py \
   --task_type zero_shot \
   --token  \
@@ -76,8 +76,8 @@ python main.py \
   --tensor_parallel_size 1
 ```
 
-```python
 #4 load checkpoint, instruction tuning Llama3 and inference
+```python
 python main.py \
      --task_type fine_tune \
      --model_type meta-llama/Llama-2-7b-hf \
@@ -87,8 +87,8 @@ python main.py \
      --skip_train
 ```
 
-```python
 #5 use gpt to inference
+```python
 python main.py \
   --task_type zero_shot \
   --openai_api_key  \
