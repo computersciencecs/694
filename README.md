@@ -238,7 +238,7 @@ In the command of running main.py, change task_type to zero_shot to switch to ze
 ## 6. Process the output of inference for different instruction tuning methods
 
 After inference is completed, copy the output file inference.txt to the ./RecRankerEval/dataprocess/process-inference-results directory, and then run the ipynb script to process the data according to the corresponding ranking method.
-We provide an example of processing results in the ./RecRankerEval/dataprocess/process-inference-results/example directory.
+We provide examples of processing the results of the variants with LightGCN as the initial model on ML-1M in Table 4 of the paper in the ./RecRankerEval/dataprocess/process-inference-results/example directory.
 
 ## Code Structure
 
