@@ -192,7 +192,6 @@ for dataset_name in dataset_names:
                 testlist = [testlist_[ran_list[ii]]]
                 neglist = [testlist_[ran_list[ii + kk]]]
                 
-                # 检查是否存在NaN值
                 if pd.isna(testlist[0]) or pd.isna(neglist[0]):
                     print(f"⚠️ Warning: Skipping invalid data for user {uni} - NaN values detected")
                     continue
@@ -235,12 +234,9 @@ for dataset_name in dataset_names:
                             cm_lable = 'No.'
                     else:
                         cm_lable = 'Unknown.'
-                        print('pairwiseUnknown')
                 except IndexError as e:
-                    print(f"⚠️ IndexError: {e}")
                     cm_lable = 'Unknown.'
                 except Exception as e:
-                    ####print(f"⚠️ Unexpected error: {e} in pairwise")
                     cm_lable = 'Unknown.'
                         
 
@@ -303,7 +299,6 @@ for dataset_name in dataset_names:
                         mf_label = mf_pred[int_uu][int_yy]
                     else:
                         mf_label = 1.5
-                        #print(f"⚠️ Warning: Prediction not found for (User: {uni}, Item: {j_}) in mf_pred!")
 
                 except KeyError:
                     print(f"❌ KeyError: Item {j_} or User {uni} not found in cm_item/cm_user!")
