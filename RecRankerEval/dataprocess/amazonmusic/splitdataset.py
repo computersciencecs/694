@@ -1,3 +1,5 @@
+#This file is used to split the Amazon Music dataset.
+
 import random
 like = []
 dislike = []
