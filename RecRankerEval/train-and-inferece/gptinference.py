@@ -1,0 +1,102 @@
+import argparse
+import json
+import jsonlines
+import openai
+import asyncio
+import aiohttp
+import os
+import sys
+import re
+import time
+from tqdm import tqdm
+
+
+openai.api_key = ""
+
+
+MAX_INT = sys.maxsize
+
+def batch_data(data_list, batch_size=1):
+
+    n = len(data_list) // batch_size + (1 if len(data_list) % batch_size > 0 else 0)
+    return [data_list[i * batch_size:(i + 1) * batch_size] for i in range(n)]
+
+async def generate_response(session, prompt, idx, progress_bar):
+
+    time.sleep(1)  
+    try:
+        response = await session.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers={"Authorization": f"Bearer {openai.api_key}"},
+            json={
+                "model": "gpt-3.5-turbo-0125",
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.1,
+                "top_p": 0.1,
+                "max_tokens": 2048
+            }
+        )
+        response_json = await response.json()
+
+       
+        generated_text = response_json["choices"][0]["message"]["content"].strip()
+        
+      
+        matches = re.findall(r"\d+\.\s*(.*?)$", generated_text, re.MULTILINE)
+        cleaned_output = "\n".join(matches[:5]) if matches else "ERROR: No valid response"
+
+        progress_bar.update(1) 
+        return f"INDEX {idx}:\n{cleaned_output}"
+    except Exception as e:
+        progress_bar.update(1) 
+        return f"INDEX {idx}: ERROR - {str(e)}"
+
+async def process_batch(batch_res_ins, start_idx, progress_bar):
+    
+    async with aiohttp.ClientSession() as session:
+        tasks = [generate_response(session, prompt, start_idx + i, progress_bar) for i, prompt in enumerate(batch_res_ins)]
+        return await asyncio.gather(*tasks)
+
+def my_test(data_path, start=0, end=MAX_INT, batch_size=1):
+    
+    res_ins = []
+
+    
+    with open(data_path, "r", encoding="utf8") as f:
+        for idx, item in enumerate(jsonlines.Reader(f)):
+            res_ins.append(item["inst"])
+
+    
+    res_ins = res_ins[start:end]
+    print(f"📌 Loaded {len(res_ins)} items for inference.")
+
+    
+    with tqdm(total=len(res_ins), desc="🚀 Processing", unit="query") as progress_bar:
+        
+        batch_res_ins = batch_data(res_ins, batch_size=batch_size)
+        result = []
+
+        for batch_idx, batch in enumerate(batch_res_ins):
+            print(f"🟢 Processing batch {batch_idx + 1}/{len(batch_res_ins)}...")
+            responses = asyncio.run(process_batch(batch, batch_idx * batch_size, progress_bar))
+            result.extend(responses)
+
+    
+    output_file = "./res_completions_gpt35.txt"
+    with open(output_file, 'w', encoding="utf-8") as file:
+        file.write("\n".join(result))
+
+    print(f"✅  {output_file}")
+
+def parse_args():
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data_file", type=str, default="listwise.jsonl") 
+    parser.add_argument("--start", type=int, default=0)  
+    parser.add_argument("--end", type=int, default=MAX_INT) 
+    parser.add_argument("--batch_size", type=int, default=10) 
+    return parser.parse_args()
+
+if __name__ == "__main__":
+    args = parse_args()
+    my_test(data_path=args.data_file, start=args.start, end=args.end, batch_size=args.batch_size)
