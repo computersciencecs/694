@@ -106,7 +106,7 @@ The output files are the processed bookcross8-4.csv and book-crossing.item-12.cs
 
 In ./RecRankerEval/dataprocess/amazonmusic, use amazonmusic-data-process.ipynb to process the original data.
 The input files are the rating file inter.csv and item information file item.csv decompressed in ./RecRankerEval/dataset/amazonmusic.
-The output files are the processed inter2-5.csv and itemnew.csv.
+The output files are the processed inter2-5.csv and itemnew-processed.csv.
 
 * Split the dataset
 
