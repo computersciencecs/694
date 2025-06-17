@@ -113,7 +113,7 @@ def run_inference(data_path, start, end, batch_size, mode):
             print(f"🟢 Processing batch {batch_idx + 1}/{len(batch_res_ins)}...")
             responses = asyncio.run(process_batch(batch, batch_idx * batch_size, progress_bar, mode))
             result.extend(responses)
-    output_file = "./res_completions_gpt35.txt"
+    output_file = "./inference.txt"
     with open(output_file, 'w', encoding="utf-8") as file:
         file.write("\n".join(result))
     print(f"✅ Inference completed! Results saved to {output_file}")
