@@ -96,6 +96,8 @@ python main.py \
   --training_type pointwise
 ```
 
+The quick start examples are for pointwise, users can obtain the input files (i.e., pairwise.jsonl, pairwisetest.jsonl ) of pairwise & listwise instruction tuning by following step 3,4 and 5.
+
 ## 3. Process the Original Dataset
 
 * Load original dataset
