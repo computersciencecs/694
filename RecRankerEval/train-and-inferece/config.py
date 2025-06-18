@@ -45,8 +45,9 @@ GPT_CONFIG = {
 
 # File path configuration
 FILE_PATHS = {
-    "train": "train.py",
-    "inference": "inference.py",
-    "zeroshot": "zeroshot.py",
-    "gptinference": "gptinference.py"
+    "train": "train_and_inferece/train.py",
+    "inference": "train_and_inferece/inference.py",
+    "zeroshot": "train_and_inferece/zeroshot.py",
+    "gptinference": "train_and_inferece/gptinference.py"
 } 
+
