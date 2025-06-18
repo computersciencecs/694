@@ -130,13 +130,13 @@ In order to obtain the pkl file required to build prompts as well as the initial
 ### Processing Format
 
 Use ./RecRankerEval/dataprocess/processing format.ipynb to modify the dislike.txt of the corresponding dataset to a file with spaces as delimiters to adapt to the initial recommendation model.
-The input file is dislike.txt of the corresponding dataset.
+The input file is dislike.txt of the corresponding dataset, which is obtained from step 3.
 The output file is dislike_set.txt of the corresponding dataset.
 
 ### Run the Initial Recommendation Model
 
 Run ./RecRankerEval/top-k-recommendation.py to use different initial recommendation models to obtain the relevant files needed to build prompts later.
-The input files are train_set.txt, test_set.txt, valid_set.txt, and dislike_set.txt in the corresponding dataset files in the ./RecRankerEval/dataset/ directory.
+The input files are train_set.txt, test_set.txt, valid_set.txt, and dislike_set.txt in the corresponding dataset files in the ./RecRankerEval/dataset/ directory, which are obtained from step 3.
 The output files are the initial recommendation list file Modelrec_save_dict.csv, the ground truth file Modelgt_save_dict.csv in the model_result subfolder of the corresponding dataset file in the ./RecRankerEval/dataset/ directory, and user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, and item_id_mapping-all.pkl in the ./RecRankerEval/dataset/ directory.
 
 The parameters and configuration files of the model are in the files corresponding to the model name in the ./RecRankerEval/conf directory.
@@ -174,7 +174,8 @@ Create a new dataset in ./RecRankerEval/dataset, and create a model_result subfo
 
 ### Organise Input Files for Train Prompts
 
-The input files are: train_set.txt, dislike.txt, movie_info.csv, user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, and item_id_mapping-all.pkl.
+The input files are: train_set.txt, dislike.txt, movie_info.csv, which are obtained from step 3;
+and user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, and item_id_mapping-all.pkl, which are obtained from step 4.
 The output files are: pointwise.jsonl, pairwise.jsonl and listwise.jsonl.
 Put all input files in the ./RecRankerEval/train_and_inference/ directory.
 
@@ -196,7 +197,8 @@ python make-train-db.py --datasets ml-1m --sample-method db
 
 ### Organise Input Files for Inference Prompts
 
-The input files are: train_set.txt, dislike.txt, movie_info.csv, user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, item_id_mapping-all.pkl, item information file, Modelgt_save_dict.csv and Modelrec_save_dict.
+The input files are: train_set.txt, dislike.txt, movie_info.csv, which are obtained from step 3;
+and user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, item_id_mapping-all.pkl, item information file, Modelgt_save_dict.csv and Modelrec_save_dict, which are obtained from step 4.
 The output files are: pointwisetest.jsonl, pairwisetest.jsonl and listwisetest.jsonl.
 Put all input files in the ./RecRankerEval/train_and_inference/ directory.
 
@@ -239,7 +241,7 @@ In the command of running main.py, change task_type to zero_shot to switch to ze
 
 ## 6. Process the Output of Inference for Different Instruction Tuning Methods
 
-After inference is completed, copy the output file inference.txt to the ./RecRankerEval/dataprocess/process-inference-results directory, and then run the ipynb script to process the data according to the corresponding ranking method.
+After inference is completed, copy the output file inference.txt from step 4 to the ./RecRankerEval/dataprocess/process-inference-results directory, and then run the ipynb script to process the data according to the corresponding ranking method.
 We provide examples of processing the results of the variants with LightGCN as the initial model on ML-1M in Table 4 of the paper in the ./RecRankerEval/dataprocess/process-inference-results/example directory.
 
 ## Code Structure
