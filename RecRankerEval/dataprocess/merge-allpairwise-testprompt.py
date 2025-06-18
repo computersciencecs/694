@@ -2,10 +2,10 @@
 import json
 
 
-file1 = "pairwisetest.jsonl"
-file2 = "pairwise_invtest.jsonl"
+file1 = "pairwisetest1.jsonl"
+file2 = "pairwise_invtest2.jsonl"
 
-output_file = "pairall.jsonl"
+output_file = "pairwisetest.jsonl"
 
 
 def read_jsonl(file_path):
