@@ -438,11 +438,11 @@ for dataset_name in dataset_names:
                 mode='w') as writer:
             writer.write_all(mes_list_pointwise)
         with jsonlines.open(
-                f'./pairwisetest.jsonl',
+                f'./pairwisetest1.jsonl',
                 mode='w') as writer:
             writer.write_all(mes_list_pairwise)
         with jsonlines.open(
-                f'./pairwise_invtest.jsonl',
+                f'./pairwise_invtest2.jsonl',
                 mode='w') as writer:
             writer.write_all(mes_list_pairwise_inv)
         with jsonlines.open(
