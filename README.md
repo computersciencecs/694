@@ -37,7 +37,7 @@ pip install jsonlines
 
 ## 2. Quick Start
 
-Run main.py in the ./RecRankerEval/train-and-inference/ directory:
+Run main.py in the ./RecRankerEval/ directory:
 
 #1 Instruction tuning Llama2 and inference
 ```python
@@ -180,7 +180,7 @@ Put all input files in the ./RecRankerEval/train-and-inference/ directory.
 
 * Configure the third dimension of RecRankerEval - user sampling
 
-Run make-train-1.py or make-train-db.py in the ./RecRankerEval/train-and-inference/ directory to generate pointwise.jsonl, pairwise.jsonl and listwise.jsonl for training respectively.
+Run make-train-1.py or make-train-db.py in the ./RecRankerEval/train_and_inference/ directory to generate pointwise.jsonl, pairwise.jsonl and listwise.jsonl for training respectively.
 Users can change the sample_method in the file to implement different user sampling methods.
 
 ```python
@@ -196,11 +196,11 @@ python make-train-db.py --datasets ml-1m --sample-method db
 
 The input files are: train_set.txt, dislike.txt, movie_info.csv, user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, item_id_mapping-all.pkl, item information file, Modelgt_save_dict.csv and Modelrec_save_dict.
 The output files are: pointwisetest.jsonl, pairwisetest.jsonl and listwisetest.jsonl.
-Put all input files in the ./RecRankerEval/train-and-inference/ directory.
+Put all input files in the ./RecRankerEval/train_and_inference/ directory.
 
 ### Build inference prompts
 
-Run make-testprompt.py in the ./RecRankerEval/train-and-inference/ directory to pointwisetest.jsonl, pairwisetest.jsonl, pairwise_invtest.jsonl and listwisetest.jsonl for inference respectively.
+Run make-testprompt.py in the ./RecRankerEval/train_and_inference/ directory to pointwisetest.jsonl, pairwisetest.jsonl, pairwise_invtest.jsonl and listwisetest.jsonl for inference respectively.
 
 ```python
 python make-testprompt.py --datasets ml-1m --models LightGCN --rec-list ./Light1rec_save_dict1.csv --gt-list ./Light1gt_save_dict1.csv
@@ -213,7 +213,7 @@ For pointwise without data leakage, we provide two files to process the training
 ./RecRankerEval/dataprocess/fix-pointwise-trainprompt.py is used to process the training prompt of pointwise.
 ./RecRankerEval/dataprocess/fix-pointwise-testprompt.py is used to process the inference prompt of pointwise.
 
-Copy the previously generated training and test prompts to the dataset directory corresponding to ./RecRankerEval/train-and-inference, and then run the ./RecRankerEval/train-and-inference/main.py to instruction tuning LLM and then inference (as shown in the Quick Start).
+Copy the previously generated training and test prompts to the dataset directory corresponding to ./RecRankerEval/train_and_inference, and then run the ./RecRankerEval/train_and_inference/main.py to instruction tuning LLM and then inference (as shown in the Quick Start).
 
 The output is inference.txt.
 
@@ -233,7 +233,7 @@ The output is inference.txt.
 * Configure the forth and fifth dimension of RecRankerEval - Instruction tuning method and LLM backbone
 
 RecRankerEval supports using different LLM backbones and different instruction tuning method.
-In the command of running main.py, change task_type to zero_shot to switch to zero shot learning; change model_type to switch to Llama3 or gpt3.5; change training_type to switch to listwsie or pointwise. Detailed configuration information is located in ./RecRankerEval/train-and-inference/config.py. Quick Start provides running examples of different configurations.
+In the command of running main.py, change task_type to zero_shot to switch to zero shot learning; change model_type to switch to Llama3 or gpt3.5; change training_type to switch to listwsie or pointwise. Detailed configuration information is located in ./RecRankerEval/train_and_inference/config.py. Quick Start provides running examples of different configurations.
 
 ## 6. Process the output of inference for different instruction tuning methods
 
@@ -271,11 +271,11 @@ We provide examples of processing the results of the variants with LightGCN as t
 │       ├── merge-allpairwise-testprompt.py
 │       ├── fix-pointwise-trainprompt.py
 │       └── fix-pointwise-testprompt.py
-│   ├── *train-and-inference*
+│   ├── *train_and_inference*
 │       ├── listwise
 │           ├── merged_model
 │           ├── results
-│           ├── trained_model
+│           └── trained_model
 │       ├── pointwise
 │           ├── merged_model
 │           ├── results
@@ -283,22 +283,21 @@ We provide examples of processing the results of the variants with LightGCN as t
 │           ├── checkpoint
 │               ├── adapter_config.json
 │               ├── adapter_model.safetensors
-│               ├── training_args.bin
-│           ├── pointwise.jsonl
-│           └── pointwisetest.jsonl
+│               └── training_args.bin
 │       ├── pairwise
 │           ├── merged_model
 │           ├── results
-│           ├── trained_model
+│           └── trained_model
 │       ├── config.py
 │       ├── gptinference.py
 │       ├── inference.py
-│       ├── make-testprompt.py
-│       ├── make-train-1.py
-│       ├── make-train-db.py
-│       ├── main.py
+│       ├── make_testprompt.py
+│       ├── make_train_1.py
+│       ├── make_train_db.py
 │       ├── train.py
-│       └── zeroshot.py
+│       ├── zeroshot.py
+│       ├── pointwise.jsonl
+│       └── pointwisetest.jsonl
 │   ├── base
 │       ├── graph_recommender.py
 │       ├── recommender.py
@@ -369,6 +368,7 @@ We provide examples of processing the results of the variants with LightGCN as t
 │       ├── loss_torch.py
 │       ├── sampler.py
 │       └── structure.py
+│   ├── *main.py*
 │   ├── initialRec.py
 │   ├── *top-k-recommendation.py*
 │   └── requirements.txt
