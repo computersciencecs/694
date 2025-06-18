@@ -37,7 +37,7 @@ pip install jsonlines
 
 ## 2. Quick Start
 
-Run main.py in the ./RecRankerEval/ directory:
+Run main.py in the ./RecRankerEval/ directory, and the output file is saved in the ./RecRankerEval/train_and_inference/pointwise path:
 
 #1 Instruction tuning Llama2 and inference
 ```python
