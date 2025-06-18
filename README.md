@@ -131,7 +131,7 @@ Use ./RecRankerEval/dataprocess/processing format.ipynb to modify the dislike.tx
 The input file is dislike.txt of the corresponding dataset.
 The output file is dislike_set.txt of the corresponding dataset.
 
-### Quick Start
+### Run the initial recommendation model
 
 Run ./RecRankerEval/top-k-recommendation.py to use different initial recommendation models to obtain the relevant files needed to build prompts later.
 The input files are train_set.txt, test_set.txt, valid_set.txt, and dislike_set.txt in the corresponding dataset files in the ./RecRankerEval/dataset/ directory.
