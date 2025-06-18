@@ -96,7 +96,7 @@ python main.py \
   --training_type pointwise
 ```
 
-## 3. Process the original dataset
+## 3. Process the Original Dataset
 
 * Load original dataset
 
