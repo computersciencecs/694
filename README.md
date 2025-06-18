@@ -121,7 +121,7 @@ The input files are the preprocessed rating files in each dataset folder in ./Re
 The output files are like.txt, dislike.txt, train_set.txt, valid_set.txt, and test_set.txt.
 The output files are saved in the ./RecRankerEval/dataset/ directory corresponding to the dataset.
 
-## 4. Run the initial recommendation model
+## 4. Run the Initial Recommendation Model
 
 In order to obtain the pkl file required to build prompts as well as the initial recommendation list and ground truth, RecRankerEval needs to run the initial recommendation model first.
 
@@ -131,7 +131,7 @@ Use ./RecRankerEval/dataprocess/processing format.ipynb to modify the dislike.tx
 The input file is dislike.txt of the corresponding dataset.
 The output file is dislike_set.txt of the corresponding dataset.
 
-### Run the initial recommendation model
+### Run the Initial Recommendation Model
 
 Run ./RecRankerEval/top-k-recommendation.py to use different initial recommendation models to obtain the relevant files needed to build prompts later.
 The input files are train_set.txt, test_set.txt, valid_set.txt, and dislike_set.txt in the corresponding dataset files in the ./RecRankerEval/dataset/ directory.
@@ -168,15 +168,15 @@ Replace the dataset name in the corresponding initial recommendation model conf 
 Replace the dataset name in the top-k-recommendation.py file;
 Create a new dataset in ./RecRankerEval/dataset, and create a model_result subfolder in the dataset.
 
-## 5. Build train and test Prompts, Run Inference with the Instruction-Tuned LLM
+## 5. Build Train and Test Prompts, Run Inference with the Instruction-Tuned LLM
 
-### Organise input files for train prompts
+### Organise Input Files for Train Prompts
 
 The input files are: train_set.txt, dislike.txt, movie_info.csv, user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, and item_id_mapping-all.pkl.
 The output files are: pointwise.jsonl, pairwise.jsonl and listwise.jsonl.
 Put all input files in the ./RecRankerEval/train_and_inference/ directory.
 
-### Build training prompts
+### Build Train Prompts
 
 * Configure the third dimension of RecRankerEval - user sampling
 
@@ -192,13 +192,13 @@ python make-train-db.py --datasets ml-1m --sample-method db
 
 ```
 
-### Organise input files for inference prompts
+### Organise Input Files for Inference Prompts
 
 The input files are: train_set.txt, dislike.txt, movie_info.csv, user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, item_id_mapping-all.pkl, item information file, Modelgt_save_dict.csv and Modelrec_save_dict.
 The output files are: pointwisetest.jsonl, pairwisetest.jsonl and listwisetest.jsonl.
 Put all input files in the ./RecRankerEval/train_and_inference/ directory.
 
-### Build inference prompts
+### Build Inference Prompts
 
 Run make-testprompt.py in the ./RecRankerEval/train_and_inference/ directory to pointwisetest.jsonl, pairwisetest.jsonl, pairwise_invtest.jsonl and listwisetest.jsonl for inference respectively.
 
@@ -235,7 +235,7 @@ The output is inference.txt.
 RecRankerEval supports using different LLM backbones and different instruction tuning method.
 In the command of running main.py, change task_type to zero_shot to switch to zero shot learning; change model_type to switch to Llama3 or gpt3.5; change training_type to switch to listwsie or pointwise. Detailed configuration information is located in ./RecRankerEval/train_and_inference/config.py. Quick Start provides running examples of different configurations.
 
-## 6. Process the output of inference for different instruction tuning methods
+## 6. Process the Output of Inference for Different Instruction Tuning Methods
 
 After inference is completed, copy the output file inference.txt to the ./RecRankerEval/dataprocess/process-inference-results directory, and then run the ipynb script to process the data according to the corresponding ranking method.
 We provide examples of processing the results of the variants with LightGCN as the initial model on ML-1M in Table 4 of the paper in the ./RecRankerEval/dataprocess/process-inference-results/example directory.
