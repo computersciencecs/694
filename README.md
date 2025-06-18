@@ -174,13 +174,13 @@ Create a new dataset in ./RecRankerEval/dataset, and create a model_result subfo
 
 The input files are: train_set.txt, dislike.txt, movie_info.csv, user.pkl, user_id_mapping.pkl, rating_matrix.pkl, pred.pkl, item.pkl, item_id_mapping.pkl, and item_id_mapping-all.pkl.
 The output files are: pointwise.jsonl, pairwise.jsonl and listwise.jsonl.
-Put all input files in the ./RecRankerEval/train-and-inference/ directory.
+Put all input files in the ./RecRankerEval/train_and_inference/ directory.
 
 ### Build training prompts
 
 * Configure the third dimension of RecRankerEval - user sampling
 
-Run make-train-1.py or make-train-db.py in the ./RecRankerEval/train_and_inference/ directory to generate pointwise.jsonl, pairwise.jsonl and listwise.jsonl for training respectively.
+Run make_train_1.py or make_train_db.py in the ./RecRankerEval/train_and_inference/ directory to generate pointwise.jsonl, pairwise.jsonl and listwise.jsonl for training respectively.
 Users can change the sample_method in the file to implement different user sampling methods.
 
 ```python
