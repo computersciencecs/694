@@ -364,8 +364,7 @@ We provide examples of processing the results of the variants with LightGCN as t
 │       ├── sampler.py
 │       └── structure.py
 │   ├── *main.py*
-│   ├── initialRec.py
-│   ├── *top-k-recommendation.py*
+│   ├── *initialRec.py*
 │   └── requirements.txt
 └── README.md
 ```
